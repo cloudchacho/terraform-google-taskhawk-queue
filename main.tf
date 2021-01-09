@@ -19,6 +19,8 @@ module "queue_default" {
   dataflow_region                 = var.dataflow_region
   dataflow_output_directory       = var.dataflow_output_directory
   dataflow_output_filename_prefix = var.dataflow_output_filename_prefix
+
+  scheduler_jobs = var.scheduler_jobs
 }
 
 module "queue_high_priority" {

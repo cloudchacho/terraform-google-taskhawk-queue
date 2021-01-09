@@ -100,3 +100,20 @@ variable "dataflow_freshness_alert_notification_channels" {
   type        = list(string)
   default     = []
 }
+
+variable "scheduler_jobs" {
+  description = "Taskhawk jobs to be run on scheduler (name should contain just a-z and hyphens)"
+  type        = list(object({
+    # TODO mark things as optional(...) in Terraform v0.14
+    name            = string        # Rule name (must be unique across all jobs)
+    description     = string        # Description of the job
+    schedule        = string        # Cloud Scheduler cron schedule expression
+    format_version  = string        # Taskhawk message format version (default v1.0)
+    timezone        = string        # Timezone for the schedule
+    headers         = map(string)   # Custom headers
+    task            = string        # Name of the task
+    args            = list(string)  # Task args
+    kwargs          = map(any)      # Task kwargs
+  }))
+  default     = []
+}

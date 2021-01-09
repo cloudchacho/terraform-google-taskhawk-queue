@@ -301,3 +301,30 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
 
   notification_channels = var.dataflow_freshness_alert_notification_channels
 }
+
+data "template_file" "data" {
+  for_each = {for job_config in var.scheduler_jobs: job_config.name => job_config}
+
+  template = file("${path.module}/data.${each.value.format_version == "" ? "v1.0" : each.value.format_version}.tpl")
+
+  vars = {
+    headers = jsonencode(each.value.headers)
+    task    = each.value.task
+    args    = jsonencode(each.value.args)
+    kwargs  = jsonencode(each.value.kwargs)
+  }
+}
+
+resource "google_cloud_scheduler_job" "job" {
+  for_each = {for job_config in var.scheduler_jobs: job_config.name => job_config}
+
+  name        = "taskhawk-${var.queue}-${replace(each.key, "_", "-")}"
+  description = each.value.description
+  schedule    = each.value.schedule
+  time_zone   = each.value.timezone
+
+  pubsub_target {
+    topic_name = google_pubsub_topic.topic.id
+    data = base64encode(data.template_file.data[each.key].rendered)
+  }
+}
