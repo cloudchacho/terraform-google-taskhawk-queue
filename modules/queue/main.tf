@@ -303,7 +303,7 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
 }
 
 data "template_file" "data" {
-  for_each = {for job_config in var.scheduler_jobs: job_config.name => job_config}
+  for_each = { for job_config in var.scheduler_jobs : job_config.name => job_config }
 
   template = file("${path.module}/data.${each.value.format_version == "" ? "v1.0" : each.value.format_version}.tpl")
 
@@ -316,7 +316,7 @@ data "template_file" "data" {
 }
 
 resource "google_cloud_scheduler_job" "job" {
-  for_each = {for job_config in var.scheduler_jobs: job_config.name => job_config}
+  for_each = { for job_config in var.scheduler_jobs : job_config.name => job_config }
 
   name        = "taskhawk-${var.queue}-${replace(each.key, "_", "-")}"
   description = each.value.description
@@ -325,6 +325,6 @@ resource "google_cloud_scheduler_job" "job" {
 
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id
-    data = base64encode(data.template_file.data[each.key].rendered)
+    data       = base64encode(data.template_file.data[each.key].rendered)
   }
 }
