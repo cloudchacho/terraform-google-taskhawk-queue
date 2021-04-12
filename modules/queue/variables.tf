@@ -2,6 +2,11 @@ variable "queue" {
   description = "Queue name (e.g. dev-myapp-low-priority); unique across your infra"
 }
 
+variable "priority" {
+  description = "priority for the queue (e.g. low/high/default/bulk)"
+  type        = string
+}
+
 variable "labels" {
   description = "Labels to attach to the PubSub topic and subscription"
   type        = map(string)

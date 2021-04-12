@@ -308,10 +308,11 @@ data "template_file" "data" {
   template = file("${path.module}/data.${each.value.format_version == "" ? "v1.0" : each.value.format_version}.tpl")
 
   vars = {
-    headers = jsonencode(each.value.headers)
-    task    = each.value.task
-    args    = jsonencode(each.value.args)
-    kwargs  = jsonencode(each.value.kwargs)
+    priority = var.priority
+    headers  = jsonencode(each.value.headers)
+    task     = each.value.task
+    args     = jsonencode(each.value.args)
+    kwargs   = jsonencode(each.value.kwargs)
   }
 }
 
