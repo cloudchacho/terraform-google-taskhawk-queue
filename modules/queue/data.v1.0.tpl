@@ -1,7 +1,7 @@
 {
     "id": "00000000-0000-0000-0000000000000000",
     "metadata": {
-        "priority": ${priority},
+        "priority": "${priority}",
         "timestamp": 1604040483000,
         "version": "1.0"
     },
