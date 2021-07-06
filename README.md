@@ -1,7 +1,7 @@
 Taskhawk Queue App Terraform module
 ===================================
 
-[Taskhawk](https://github.com/standard-ai/taskhawk) is a replacement for celery that works on AWS SQS/SNS and
+[Taskhawk](https://github.com/cloudchacho/taskhawk) is a replacement for celery that works on AWS SQS/SNS and
 Google Pub/Sub, while keeping things pretty simple and straight forward. 
 
 This module provides a custom [Terraform](https://www.terraform.io/) module for deploying Taskhawk 
@@ -11,7 +11,7 @@ Usage
 -----
 ```hcl
 module "taskhawk-dev-myapp" {
-  source   = "standard-ai/taskhawk-queue/google"
+  source   = "cloudchacho/taskhawk-queue/google"
   queue    = "dev-myapp"
 
   enable_alerts = true
@@ -64,8 +64,8 @@ The Pub/Sub topic name will be prefixed by `taskhawk-`.
 
 ## Release Notes
 
-[Github Releases](https://github.com/standard-ai/terraform-google-taskhawk-queue/releases)
+[Github Releases](https://github.com/cloudchacho/terraform-google-taskhawk-queue/releases)
 
 ## How to publish
 
-Go to [Terraform Registry](https://registry.terraform.io/modules/standard-ai/taskhawk-queue/google), and Resync module.
+Go to [Terraform Registry](https://registry.terraform.io/modules/cloudchacho/taskhawk-queue/google), and Resync module.
