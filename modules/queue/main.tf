@@ -9,7 +9,7 @@ resource "google_pubsub_topic" "topic" {
 
 data "google_iam_policy" "topic_policy" {
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -18,7 +18,7 @@ data "google_iam_policy" "topic_policy" {
   }
 
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -28,7 +28,7 @@ data "google_iam_policy" "topic_policy" {
 }
 
 resource "google_pubsub_topic_iam_policy" "topic_policy" {
-  count = length(var.iam_service_accounts) == 0 ? 0 : 1
+  count = length(local.iam_service_accounts) == 0 ? 0 : 1
 
   policy_data = data.google_iam_policy.topic_policy.policy_data
   topic       = google_pubsub_topic.topic.name
@@ -54,7 +54,7 @@ resource "google_pubsub_subscription" "subscription" {
 
 data "google_iam_policy" "subscription_policy" {
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -63,7 +63,7 @@ data "google_iam_policy" "subscription_policy" {
   }
 
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -87,7 +87,7 @@ data "google_iam_policy" "subscription_policy" {
 }
 
 resource "google_pubsub_subscription_iam_policy" "subscription_policy" {
-  count = length(var.iam_service_accounts) == 0 ? 0 : 1
+  count = length(local.iam_service_accounts) == 0 ? 0 : 1
 
   policy_data  = data.google_iam_policy.subscription_policy.policy_data
   subscription = google_pubsub_subscription.subscription.name
@@ -101,7 +101,7 @@ resource "google_pubsub_topic" "dlq_topic" {
 
 data "google_iam_policy" "dlq_topic_policy" {
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -110,7 +110,7 @@ data "google_iam_policy" "dlq_topic_policy" {
   }
 
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -134,7 +134,7 @@ data "google_iam_policy" "dlq_topic_policy" {
 }
 
 resource "google_pubsub_topic_iam_policy" "dlq_topic_policy" {
-  count = length(var.iam_service_accounts) == 0 ? 0 : 1
+  count = length(local.iam_service_accounts) == 0 ? 0 : 1
 
   policy_data = data.google_iam_policy.dlq_topic_policy.policy_data
   topic       = google_pubsub_topic.dlq_topic.name
@@ -155,7 +155,7 @@ resource "google_pubsub_subscription" "dlq_subscription" {
 
 data "google_iam_policy" "dlq_subscription_policy" {
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -164,7 +164,7 @@ data "google_iam_policy" "dlq_subscription_policy" {
   }
 
   dynamic "binding" {
-    for_each = var.iam_service_accounts
+    for_each = local.iam_service_accounts
 
     content {
       members = ["serviceAccount:${binding.value}"]
@@ -174,7 +174,7 @@ data "google_iam_policy" "dlq_subscription_policy" {
 }
 
 resource "google_pubsub_subscription_iam_policy" "dlq_subscription_policy" {
-  count = length(var.iam_service_accounts) == 0 ? 0 : 1
+  count = length(local.iam_service_accounts) == 0 ? 0 : 1
 
   policy_data  = data.google_iam_policy.dlq_subscription_policy.policy_data
   subscription = google_pubsub_subscription.dlq_subscription.name
@@ -192,7 +192,7 @@ resource "google_monitoring_alert_policy" "high_message_alert" {
     display_name = "${title(var.queue)} Taskhawk queue message count too high${local.title_suffix}"
 
     condition_threshold {
-      threshold_value = var.queue_alarm_high_message_count_threshold // Number of messages
+      threshold_value = coalesce(var.queue_alarm_high_message_count_threshold, 5000) // Number of messages
       comparison      = "COMPARISON_GT"
       duration        = "300s" // Seconds
 
@@ -281,7 +281,7 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
     display_name = "Dataflow data age for ${google_dataflow_job.firehose[0].name}${local.title_suffix}"
 
     condition_threshold {
-      threshold_value = var.dataflow_freshness_alert_threshold // Freshness is seconds
+      threshold_value = coalesce(var.dataflow_freshness_alert_threshold, 1800) // Freshness is seconds
       comparison      = "COMPARISON_GT"
       duration        = "60s" // Seconds
 
@@ -305,14 +305,14 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
 data "template_file" "data" {
   for_each = { for job_config in var.scheduler_jobs : job_config.name => job_config }
 
-  template = file("${path.module}/data.${each.value.format_version == "" ? "v1.0" : each.value.format_version}.tpl")
+  template = file("${path.module}/data.${each.value.format_version == "" || each.value.format_version == null ? "v1.0" : each.value.format_version}.tpl")
 
   vars = {
     priority = var.priority
-    headers  = jsonencode(each.value.headers)
+    headers  = jsonencode(each.value.headers == null ? {} : each.value.headers)
     task     = each.value.task
-    args     = jsonencode(each.value.args)
-    kwargs   = jsonencode(each.value.kwargs)
+    args     = jsonencode(each.value.args == null ? [] : each.value.args)
+    kwargs   = jsonencode(each.value.kwargs == null ? {} : each.value.kwargs)
   }
 }
 
