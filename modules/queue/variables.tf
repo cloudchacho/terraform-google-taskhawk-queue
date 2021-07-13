@@ -98,7 +98,8 @@ variable "scheduler_jobs" {
     headers        = optional(map(string))  # Custom headers
     task           = string                 # Name of the task
     args           = optional(list(string)) # Task args
-    kwargs         = optional(map(any))     # Task kwargs
+    kwargs         = optional(map(string))  # Task kwargs
+    kwargs_encoded = optional(string)       # Task kwargs encoded as a JSON string (use this to get around terraform type problems), if set this is preferred over kwargs
   }))
   default = []
 }

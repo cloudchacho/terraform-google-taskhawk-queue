@@ -312,7 +312,7 @@ data "template_file" "data" {
     headers  = jsonencode(each.value.headers == null ? {} : each.value.headers)
     task     = each.value.task
     args     = jsonencode(each.value.args == null ? [] : each.value.args)
-    kwargs   = jsonencode(each.value.kwargs == null ? {} : each.value.kwargs)
+    kwargs   = each.value.kwargs_encoded != null && each.value.kwargs_encoded != "" ? each.value.kwargs_encoded : jsonencode(each.value.kwargs == null ? {} : each.value.kwargs)
   }
 }
 
