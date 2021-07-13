@@ -87,7 +87,7 @@ data "google_iam_policy" "subscription_policy" {
 }
 
 resource "google_pubsub_subscription_iam_policy" "subscription_policy" {
-  count = length(local.iam_service_accounts) == 0 ? 0 : 1
+  count = 1
 
   policy_data  = data.google_iam_policy.subscription_policy.policy_data
   subscription = google_pubsub_subscription.subscription.name
@@ -134,7 +134,7 @@ data "google_iam_policy" "dlq_topic_policy" {
 }
 
 resource "google_pubsub_topic_iam_policy" "dlq_topic_policy" {
-  count = length(local.iam_service_accounts) == 0 ? 0 : 1
+  count = 1
 
   policy_data = data.google_iam_policy.dlq_topic_policy.policy_data
   topic       = google_pubsub_topic.dlq_topic.name
