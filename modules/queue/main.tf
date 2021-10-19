@@ -194,7 +194,7 @@ resource "google_monitoring_alert_policy" "high_message_alert" {
     condition_threshold {
       threshold_value = coalesce(var.queue_alarm_high_message_count_threshold, 5000) // Number of messages
       comparison      = "COMPARISON_GT"
-      duration        = "300s" // Seconds
+      duration        = format("%ds", coalesce(var.queue_alarm_test_duration_s, 300)) // Seconds
 
       filter = "metric.type=\"pubsub.googleapis.com/subscription/num_undelivered_messages\" resource.type=\"pubsub_subscription\" resource.label.\"subscription_id\"=\"${google_pubsub_subscription.subscription.name}\"${local.filter_suffix}"
 

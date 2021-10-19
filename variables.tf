@@ -68,6 +68,26 @@ variable "queue_alarm_bulk_high_message_count_threshold" {
   default     = 5000
 }
 
+variable "queue_alarm_test_duration_s" {
+  description = "The duration for testing for alerting on high message count in main queue (defaults to 5 minutes)"
+  default     = ""
+}
+
+variable "queue_alarm_high_priority_test_duration_s" {
+  description = "The duration for testing for alerting on high message count in high priority queue (defaults to 5 minutes)"
+  default     = ""
+}
+
+variable "queue_alarm_low_priority_test_duration_s" {
+  description = "The duration for testing for alerting on high message count in low priority queue (defaults to 5 minutes)"
+  default     = ""
+}
+
+variable "queue_alarm_bulk_test_duration_s" {
+  description = "The duration for testing for alerting on high message count in bulk queue (defaults to 5 minutes)"
+  default     = ""
+}
+
 variable "queue_high_message_count_notification_channels" {
   description = "Stackdriver Notification Channels for main queue alarm for high message count (required if alerting is on)"
   type        = list(string)

@@ -10,6 +10,7 @@ module "queue_default" {
 
   alerting_project                               = var.alerting_project
   queue_alarm_high_message_count_threshold       = var.queue_alarm_high_message_count_threshold
+  queue_alarm_test_duration_s                    = var.queue_alarm_test_duration_s
   queue_high_message_count_notification_channels = var.queue_high_message_count_notification_channels
   dlq_high_message_count_notification_channels   = var.dlq_high_message_count_notification_channels
 
@@ -36,6 +37,7 @@ module "queue_high_priority" {
 
   alerting_project                               = var.alerting_project
   queue_alarm_high_message_count_threshold       = var.queue_alarm_high_priority_high_message_count_threshold
+  queue_alarm_test_duration_s                    = var.queue_alarm_high_priority_test_duration_s
   queue_high_message_count_notification_channels = var.queue_high_message_count_notification_channels
   dlq_high_message_count_notification_channels   = var.dlq_high_message_count_notification_channels
 
@@ -62,6 +64,7 @@ module "queue_low_priority" {
 
   alerting_project                               = var.alerting_project
   queue_alarm_high_message_count_threshold       = var.queue_alarm_low_priority_high_message_count_threshold
+  queue_alarm_test_duration_s                    = var.queue_alarm_low_priority_test_duration_s
   queue_high_message_count_notification_channels = var.queue_high_message_count_notification_channels
   dlq_high_message_count_notification_channels   = var.dlq_high_message_count_notification_channels
 
@@ -88,6 +91,7 @@ module "queue_bulk" {
 
   alerting_project                               = var.alerting_project
   queue_alarm_high_message_count_threshold       = var.queue_alarm_bulk_high_message_count_threshold
+  queue_alarm_test_duration_s                    = var.queue_alarm_bulk_test_duration_s
   queue_high_message_count_notification_channels = var.queue_high_message_count_notification_channels
   dlq_high_message_count_notification_channels   = var.dlq_high_message_count_notification_channels
 
