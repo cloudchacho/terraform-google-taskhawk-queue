@@ -53,11 +53,16 @@ variable "dataflow_output_filename_prefix" {
 }
 
 variable "queue_alarm_high_message_count_threshold" {
-  description = "Threshold for alerting on high message count in main queue"
+  description = "Threshold for alerting on high message count"
+}
+
+variable "queue_alarm_test_duration" {
+  description = "The duration for testing for alerting on high message count (defaults to 5 minutes)"
+  default     = ""
 }
 
 variable "queue_high_message_count_notification_channels" {
-  description = "Stackdriver Notification Channels for main queue alarm for high message count (required if alerting is on)"
+  description = "Stackdriver Notification Channels alarm for high message count (required if alerting is on)"
   type        = list(string)
 }
 
