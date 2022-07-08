@@ -323,6 +323,7 @@ resource "google_cloud_scheduler_job" "job" {
   description = each.value.description
   schedule    = each.value.schedule
   time_zone   = each.value.timezone
+  region      = var.scheduler_region
 
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id

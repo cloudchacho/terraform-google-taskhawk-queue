@@ -138,3 +138,8 @@ variable "scheduler_jobs" {
   }))
   default = []
 }
+
+variable "scheduler_region" {
+  description = "The region to use for Cloud Scheduler. This may be required if it's not set at the provider level."
+  default     = ""
+}
