@@ -22,7 +22,8 @@ module "queue_default" {
   dataflow_output_directory       = var.dataflow_output_directory
   dataflow_output_filename_prefix = var.dataflow_output_filename_prefix
 
-  scheduler_jobs = [for job in local.scheduler_jobs : job if job.priority == local.priority_default || job.priority == local.priority_empty || job.priority == null]
+  scheduler_jobs   = [for job in local.scheduler_jobs : job if job.priority == local.priority_default || job.priority == local.priority_empty || job.priority == null]
+  scheduler_region = var.scheduler_region
 }
 
 module "queue_high_priority" {
@@ -49,7 +50,8 @@ module "queue_high_priority" {
   dataflow_output_directory       = var.dataflow_output_directory
   dataflow_output_filename_prefix = var.dataflow_output_filename_prefix
 
-  scheduler_jobs = [for job in local.scheduler_jobs : job if job.priority == local.priority_high]
+  scheduler_jobs   = [for job in local.scheduler_jobs : job if job.priority == local.priority_high]
+  scheduler_region = var.scheduler_region
 }
 
 module "queue_low_priority" {
@@ -76,7 +78,8 @@ module "queue_low_priority" {
   dataflow_output_directory       = var.dataflow_output_directory
   dataflow_output_filename_prefix = var.dataflow_output_filename_prefix
 
-  scheduler_jobs = [for job in local.scheduler_jobs : job if job.priority == local.priority_low]
+  scheduler_jobs   = [for job in local.scheduler_jobs : job if job.priority == local.priority_low]
+  scheduler_region = var.scheduler_region
 }
 
 module "queue_bulk" {
@@ -103,5 +106,6 @@ module "queue_bulk" {
   dataflow_output_directory       = var.dataflow_output_directory
   dataflow_output_filename_prefix = var.dataflow_output_filename_prefix
 
-  scheduler_jobs = [for job in local.scheduler_jobs : job if job.priority == local.priority_bulk]
+  scheduler_jobs   = [for job in local.scheduler_jobs : job if job.priority == local.priority_bulk]
+  scheduler_region = var.scheduler_region
 }
