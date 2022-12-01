@@ -328,5 +328,8 @@ resource "google_cloud_scheduler_job" "job" {
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id
     data       = base64encode(data.template_file.data[each.key].rendered)
+    attributes = {
+      taskhawk_task = each.value.task
+    }
   }
 }
