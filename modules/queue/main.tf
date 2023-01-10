@@ -211,7 +211,7 @@ resource "google_monitoring_alert_policy" "high_message_alert" {
 
   notification_channels = var.queue_high_message_count_notification_channels
 
-  labels = var.labels
+  user_labels = var.labels
 }
 
 resource "google_monitoring_alert_policy" "dlq_alert" {
