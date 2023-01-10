@@ -210,6 +210,8 @@ resource "google_monitoring_alert_policy" "high_message_alert" {
   }
 
   notification_channels = var.queue_high_message_count_notification_channels
+
+  labels = var.labels
 }
 
 resource "google_monitoring_alert_policy" "dlq_alert" {
@@ -242,6 +244,8 @@ resource "google_monitoring_alert_policy" "dlq_alert" {
   }
 
   notification_channels = var.dlq_high_message_count_notification_channels
+
+  user_labels = var.labels
 }
 
 data "google_client_config" "current" {
@@ -300,6 +304,8 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
   }
 
   notification_channels = var.dataflow_freshness_alert_notification_channels
+
+  user_labels = var.labels
 }
 
 data "template_file" "data" {
