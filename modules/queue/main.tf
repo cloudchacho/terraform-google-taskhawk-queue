@@ -330,6 +330,7 @@ resource "google_cloud_scheduler_job" "job" {
   schedule    = each.value.schedule
   time_zone   = each.value.timezone
   region      = var.scheduler_region
+  paused      = false
 
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id
@@ -337,5 +338,9 @@ resource "google_cloud_scheduler_job" "job" {
     attributes = {
       taskhawk_task = each.value.task
     }
+  }
+
+  lifecycle {
+    ignore_changes = [paused]
   }
 }
