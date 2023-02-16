@@ -4,6 +4,6 @@ terraform {
   experiments = [module_variable_optional_attrs]
 
   required_providers {
-    google = ">= 3.16.0"
+    google = ">= 4.51.0"
   }
 }
