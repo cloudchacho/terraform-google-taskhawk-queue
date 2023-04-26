@@ -124,19 +124,20 @@ variable "dataflow_freshness_alert_notification_channels" {
 variable "scheduler_jobs" {
   description = "Taskhawk jobs to be run on scheduler (name should contain just a-z and hyphens)"
   type = list(object({
-    name           = string                 # Rule name (must be unique across all jobs)
-    description    = optional(string)       # Description of the job
-    schedule       = string                 # Cloud Scheduler cron schedule expression
-    priority       = optional(string)       # Which queue to scheduled task into? (defaults to default)
-    format_version = optional(string)       # Taskhawk message format version (default v1.0)
-    timezone       = string                 # Timezone for the schedule
-    headers        = optional(map(string))  # Custom headers
-    task           = string                 # Name of the task
-    args           = optional(list(string)) # Task args
-    kwargs         = optional(map(string))  # Task kwargs
-    kwargs_encoded = optional(string)       # Task kwargs encoded as a JSON string (use this to get around terraform type problems), if set this is preferred over kwargs
+    name           = string                      # Rule name (must be unique across all jobs)
+    description    = optional(string)            # Description of the job
+    schedule       = string                      # Cloud Scheduler cron schedule expression
+    priority       = optional(string, "default") # Which queue to scheduled task into?
+    format_version = optional(string, "v1.0")    # Taskhawk message format version
+    timezone       = string                      # Timezone for the schedule
+    headers        = optional(map(string), {})   # Custom headers
+    task           = string                      # Name of the task
+    args           = optional(list(string), [])  # Task args
+    kwargs         = optional(map(string), {})   # Task kwargs
+    kwargs_encoded = optional(string)            # Task kwargs encoded as a JSON string (use this to get around terraform type problems), if set this is preferred over kwargs
   }))
-  default = []
+  default  = []
+  nullable = false
 }
 
 variable "scheduler_region" {
