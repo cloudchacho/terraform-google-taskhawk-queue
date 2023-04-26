@@ -1,7 +1,5 @@
 terraform {
-  required_version = ">= 0.15"
-
-  experiments = [module_variable_optional_attrs]
+  required_version = ">= 1.3"
 
   required_providers {
     google = ">= 4.51.0"

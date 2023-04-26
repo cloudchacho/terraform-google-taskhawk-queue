@@ -308,20 +308,6 @@ resource "google_monitoring_alert_policy" "dataflow_freshness" {
   user_labels = var.labels
 }
 
-data "template_file" "data" {
-  for_each = { for job_config in var.scheduler_jobs : job_config.name => job_config }
-
-  template = file("${path.module}/data.${each.value.format_version == "" || each.value.format_version == null ? "v1.0" : each.value.format_version}.tpl")
-
-  vars = {
-    priority = var.priority
-    headers  = jsonencode(each.value.headers == null ? {} : each.value.headers)
-    task     = each.value.task
-    args     = jsonencode(each.value.args == null ? [] : each.value.args)
-    kwargs   = each.value.kwargs_encoded != null && each.value.kwargs_encoded != "" ? each.value.kwargs_encoded : jsonencode(each.value.kwargs == null ? {} : each.value.kwargs)
-  }
-}
-
 resource "google_cloud_scheduler_job" "job" {
   for_each = { for job_config in var.scheduler_jobs : job_config.name => job_config }
 
@@ -334,7 +320,13 @@ resource "google_cloud_scheduler_job" "job" {
 
   pubsub_target {
     topic_name = google_pubsub_topic.topic.id
-    data       = base64encode(data.template_file.data[each.key].rendered)
+    data = base64encode(templatefile("${path.module}/data.${each.value.format_version}.tpl", {
+      priority = var.priority
+      headers  = jsonencode(each.value.headers)
+      task     = each.value.task
+      args     = jsonencode(each.value.args)
+      kwargs   = each.value.kwargs_encoded != null ? each.value.kwargs_encoded : jsonencode(each.value.kwargs)
+    }))
     attributes = {
       taskhawk_task = each.value.task
     }
