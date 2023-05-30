@@ -24,6 +24,7 @@ module "queue_default" {
 
   scheduler_jobs   = [for job in var.scheduler_jobs : job if job.priority == local.priority_default || job.priority == local.priority_empty || job.priority == null]
   scheduler_region = var.scheduler_region
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
 }
 
 module "queue_high_priority" {
@@ -52,6 +53,7 @@ module "queue_high_priority" {
 
   scheduler_jobs   = [for job in var.scheduler_jobs : job if job.priority == local.priority_high]
   scheduler_region = var.scheduler_region
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
 }
 
 module "queue_low_priority" {
@@ -80,6 +82,7 @@ module "queue_low_priority" {
 
   scheduler_jobs   = [for job in var.scheduler_jobs : job if job.priority == local.priority_low]
   scheduler_region = var.scheduler_region
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
 }
 
 module "queue_bulk" {
@@ -108,4 +111,5 @@ module "queue_bulk" {
 
   scheduler_jobs   = [for job in var.scheduler_jobs : job if job.priority == local.priority_bulk]
   scheduler_region = var.scheduler_region
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
 }
