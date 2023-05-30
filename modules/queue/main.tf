@@ -42,6 +42,8 @@ resource "google_pubsub_subscription" "subscription" {
 
   labels = var.labels
 
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
+
   expiration_policy {
     ttl = ""
   }
@@ -147,6 +149,8 @@ resource "google_pubsub_subscription" "dlq_subscription" {
   ack_deadline_seconds = 20
 
   labels = var.labels
+
+  enable_exactly_once_delivery = var.enable_exactly_once_delivery
 
   expiration_policy {
     ttl = ""

@@ -144,3 +144,8 @@ variable "scheduler_region" {
   description = "The region to use for Cloud Scheduler. This may be required if it's not set at the provider level."
   default     = ""
 }
+
+variable "enable_exactly_once_delivery" {
+  description = "Enable exactly-once delivery for the PubSub subscriptions"
+  default     = false
+}
