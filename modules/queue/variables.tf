@@ -122,5 +122,4 @@ variable "enable_exactly_once_delivery" {
 
 variable "ack_deadline_seconds" {
   description = "The ack deadline in seconds for the PubSub subscriptions"
-  default     = 20
 }
