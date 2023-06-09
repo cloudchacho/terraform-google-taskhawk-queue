@@ -38,7 +38,7 @@ resource "google_pubsub_subscription" "subscription" {
   name  = "taskhawk-${var.queue}"
   topic = google_pubsub_topic.topic.name
 
-  ack_deadline_seconds = 20
+  ack_deadline_seconds = var.ack_deadline_seconds
 
   labels = var.labels
 
@@ -146,7 +146,7 @@ resource "google_pubsub_subscription" "dlq_subscription" {
   name  = "taskhawk-${var.queue}-dlq"
   topic = google_pubsub_topic.dlq_topic.name
 
-  ack_deadline_seconds = 20
+  ack_deadline_seconds = var.ack_deadline_seconds
 
   labels = var.labels
 
